@@ -16,39 +16,42 @@
     <!-- Navbar -->
     <nav class="bg-blue-900 text-white p-4 shadow-lg flex justify-between items-center">
         <div class="flex items-center">
-            <!-- Logo Added Here -->
             <img src="logo.png" alt="Emmanuel Logo" class="h-12 w-12 mr-3 bg-white rounded-full p-1 object-contain">
             <div>
                 <h1 class="text-xl font-bold tracking-wider">Emmanuel Senior Secondary School</h1>
                 <p class="text-xs text-blue-200">Library Management System <span id="currentUserDisplay" class="ml-2 font-bold text-yellow-300"></span></p>
             </div>
         </div>
-        <div id="navButtons" class="hidden space-x-2 flex-wrap">
-            <button onclick="window.showSection('dashboard')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Home</button>
-            <button onclick="window.showSection('addBookSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Add Book</button>
-            <button onclick="window.showSection('studentsSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Students</button>
-            <button onclick="window.showSection('issueSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Issue/Return</button>
-            <button id="manageAdminsBtn" onclick="window.showSection('adminApprovalSection')" class="bg-purple-600 px-3 py-1 rounded text-sm hover:bg-purple-500 hidden font-bold">Manage Teachers</button>
-            <button onclick="window.logout()" class="bg-red-500 px-3 py-1 rounded text-sm hover:bg-red-600 font-bold">Logout</button>
+        <div id="navButtons" class="hidden space-x-2 flex-wrap mt-2 md:mt-0">
+            <button onclick="window.showSection('dashboard')" class="bg-blue-700 px-3 py-1 mt-1 rounded text-sm hover:bg-blue-600">Home</button>
+            <button onclick="window.showSection('addBookSection')" class="bg-blue-700 px-3 py-1 mt-1 rounded text-sm hover:bg-blue-600">Add Book</button>
+            <button onclick="window.showSection('studentsSection')" class="bg-blue-700 px-3 py-1 mt-1 rounded text-sm hover:bg-blue-600">Students</button>
+            <button onclick="window.showSection('issueSection')" class="bg-blue-700 px-3 py-1 mt-1 rounded text-sm hover:bg-blue-600">Issue/Return</button>
+            <button id="manageAdminsBtn" onclick="window.showSection('adminApprovalSection')" class="bg-purple-600 px-3 py-1 mt-1 rounded text-sm hover:bg-purple-500 hidden font-bold">Manage Teachers</button>
+            <button onclick="window.showSection('changePasswordSection')" class="bg-gray-600 px-3 py-1 mt-1 rounded text-sm hover:bg-gray-500 font-bold">Change Pass</button>
+            <button onclick="window.logout()" class="bg-red-500 px-3 py-1 mt-1 rounded text-sm hover:bg-red-600 font-bold">Logout</button>
         </div>
     </nav>
 
-    <!-- 1. LOGIN & REGISTRATION SCREEN -->
+    <!-- 1. LOGIN, REGISTRATION & FORGOT PASSWORD SCREEN -->
     <div id="authScreen" class="container mx-auto mt-20 flex justify-center fade-in">
         <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm border-t-4 border-blue-900">
+            
+            <!-- Login -->
             <div id="loginDiv">
                 <h2 class="text-2xl font-bold text-center mb-6">Staff Login</h2>
                 <form onsubmit="window.login(event)">
                     <input type="text" id="loginId" required placeholder="User ID" class="w-full mb-4 p-2 border rounded focus:ring-2 focus:ring-blue-500">
-                    <input type="password" id="loginPass" required placeholder="Password" class="w-full mb-6 p-2 border rounded focus:ring-2 focus:ring-blue-500">
+                    <input type="password" id="loginPass" required placeholder="Password" class="w-full mb-4 p-2 border rounded focus:ring-2 focus:ring-blue-500">
                     <button type="submit" class="w-full bg-blue-900 text-white font-bold py-2 rounded hover:bg-blue-800">Login</button>
                 </form>
-                <div class="text-center mt-4 border-t pt-4">
-                    <p class="text-sm text-gray-600">New Teacher?</p>
-                    <button onclick="window.toggleAuth('register')" class="text-blue-600 font-bold hover:underline">Request Admin Access</button>
+                <div class="flex justify-between items-center mt-4 border-t pt-4 text-sm">
+                    <button onclick="window.toggleAuth('forgot')" class="text-red-500 font-bold hover:underline">Forgot Password?</button>
+                    <button onclick="window.toggleAuth('register')" class="text-blue-600 font-bold hover:underline">New Teacher?</button>
                 </div>
             </div>
 
+            <!-- Register -->
             <div id="registerDiv" class="hidden">
                 <h2 class="text-xl font-bold text-center mb-2">Request Access</h2>
                 <p class="text-xs text-center text-red-500 mb-4">Requires Super Admin Approval</p>
@@ -62,13 +65,29 @@
                     <button onclick="window.toggleAuth('login')" class="text-blue-600 font-bold hover:underline">Back to Login</button>
                 </div>
             </div>
+
+            <!-- Forgot Password -->
+            <div id="forgotDiv" class="hidden">
+                <h2 class="text-xl font-bold text-center mb-2 text-red-600">Reset Password</h2>
+                <p class="text-xs text-center text-gray-500 mb-4">Account will require Admin re-approval for security.</p>
+                <form onsubmit="window.forgotPassword(event)">
+                    <input type="text" id="forgotId" required placeholder="Your User ID" class="w-full mb-3 p-2 border rounded">
+                    <input type="text" id="forgotName" required placeholder="Your Full Name" class="w-full mb-3 p-2 border rounded">
+                    <input type="password" id="forgotPass" required placeholder="Enter New Password" class="w-full mb-4 p-2 border rounded">
+                    <button type="submit" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700">Reset Password</button>
+                </form>
+                <div class="text-center mt-4 border-t pt-4">
+                    <button onclick="window.toggleAuth('login')" class="text-blue-600 font-bold hover:underline">Back to Login</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <!-- MAIN APP WRAPPER -->
     <div id="mainApp" class="container mx-auto mt-6 p-4 hidden">
         
-        <!-- DASHBOARD -->
+        <!-- DASHBOARD (Shows Books & Automatic Quantity feature) -->
         <div id="dashboard" class="fade-in">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-gray-700">Available Books</h2>
@@ -77,11 +96,14 @@
             <div class="bg-white p-4 rounded-lg shadow overflow-x-auto mb-8">
                 <table class="w-full table-auto border-collapse text-sm">
                     <thead>
-                        <tr class="bg-gray-200 text-gray-700 text-left"><th class="p-3 border">Book ID</th><th class="p-3 border">Title</th><th class="p-3 border">Author</th><th class="p-3 border">Copies</th></tr>
+                        <tr class="bg-gray-200 text-gray-700 text-left">
+                            <th class="p-3 border">Book ID</th><th class="p-3 border">Title</th><th class="p-3 border">Author</th><th class="p-3 border">Copies Available</th><th class="p-3 border text-center">Action</th>
+                        </tr>
                     </thead>
                     <tbody id="booksTableBody"></tbody>
                 </table>
             </div>
+            
             <h2 class="text-2xl font-bold text-gray-700 mb-4">Issue Records</h2>
             <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
                 <table class="w-full table-auto border-collapse text-sm">
@@ -118,23 +140,33 @@
             </div>
         </div>
 
-        <!-- ISSUE / RETURN BOOK -->
+        <!-- ISSUE / RETURN BOOK (This automatically updates quantity) -->
         <div id="issueSection" class="hidden fade-in grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-bold mb-4 text-orange-600">Issue Book</h2>
+            <div class="bg-white p-6 rounded-lg shadow border-l-4 border-orange-500">
+                <h2 class="text-xl font-bold mb-4 text-orange-600">Issue Book (Quantity will decrease)</h2>
                 <form onsubmit="window.issueBook(event)">
                     <input type="number" id="issueBookId" required placeholder="Book ID" class="w-full mb-3 p-2 border rounded">
                     <input type="number" id="issueStudentId" required placeholder="Student ID" class="w-full mb-4 p-2 border rounded">
                     <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 rounded hover:bg-orange-600">Issue Book</button>
                 </form>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-bold mb-4 text-green-600">Return Book</h2>
+            <div class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
+                <h2 class="text-xl font-bold mb-4 text-green-600">Return Book (Quantity will increase)</h2>
                 <form onsubmit="window.returnBook(event)">
                     <input type="number" id="returnIssueId" required placeholder="Issue Record ID" class="w-full mb-4 p-2 border rounded">
                     <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 rounded hover:bg-green-600">Return Book</button>
                 </form>
             </div>
+        </div>
+
+        <!-- CHANGE PASSWORD (AFTER LOGIN) -->
+        <div id="changePasswordSection" class="hidden fade-in bg-white p-6 rounded-lg shadow max-w-sm mx-auto border-t-4 border-gray-600">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">Change Password</h2>
+            <form onsubmit="window.changePassword(event)" id="changePassForm">
+                <input type="password" id="oldPass" required placeholder="Current Password" class="w-full mb-3 p-2 border rounded">
+                <input type="password" id="newPass" required placeholder="New Password" class="w-full mb-3 p-2 border rounded">
+                <button type="submit" class="w-full bg-gray-700 text-white font-bold py-2 rounded hover:bg-gray-800">Update Password</button>
+            </form>
         </div>
 
         <!-- SUPER ADMIN: TEACHER APPROVAL -->
@@ -156,7 +188,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-        // Your Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyA3m77BMw93W2wGGHedUrj02Y9rSG_O9eY",
             authDomain: "emmanuellibrary-55db6.firebaseapp.com",
@@ -180,18 +211,26 @@
         // Realtime Data Sync
         onValue(ref(db, 'libraryData'), (snapshot) => {
             const data = snapshot.val() || {};
-            
-            // Default Super Admin Injection
             window.users = data.users || [
-                { id: 'emmanuel', pass: 'emanuel@123', name: 'Principal Sir', role: 'superadmin', approved: true }
+                { id: 'emmanuel', pass: 'emmanuel@123', name: 'Principal Sir', role: 'superadmin', approved: true }
             ];
-            
             window.books = data.books || [];
             window.students = data.students || [];
             window.issues = data.issues || [];
             
-            if(!data.users) window.saveData(); // Save default admin if DB is completely empty
-            if(window.loggedInUser) window.renderAll();
+            if(!data.users) window.saveData(); 
+            
+            // Auto-logout if admin deletes/suspends this account while logged in
+            if(window.loggedInUser) {
+                let checkUser = window.users.find(u => u.id === window.loggedInUser.id);
+                if(!checkUser || !checkUser.approved) {
+                    alert("Your session expired or access was revoked by Super Admin.");
+                    window.logout();
+                } else {
+                    window.loggedInUser = checkUser;
+                    window.renderAll();
+                }
+            }
         });
 
         window.saveData = function() {
@@ -205,13 +244,13 @@
 
         // --- AUTH LOGIC ---
         window.toggleAuth = function(type) {
-            if(type === 'register') {
-                document.getElementById('loginDiv').classList.add('hidden');
-                document.getElementById('registerDiv').classList.remove('hidden');
-            } else {
-                document.getElementById('registerDiv').classList.add('hidden');
-                document.getElementById('loginDiv').classList.remove('hidden');
-            }
+            document.getElementById('loginDiv').classList.add('hidden');
+            document.getElementById('registerDiv').classList.add('hidden');
+            document.getElementById('forgotDiv').classList.add('hidden');
+            
+            if(type === 'register') document.getElementById('registerDiv').classList.remove('hidden');
+            else if(type === 'forgot') document.getElementById('forgotDiv').classList.remove('hidden');
+            else document.getElementById('loginDiv').classList.remove('hidden');
         }
 
         window.registerTeacher = function(e) {
@@ -229,6 +268,29 @@
             window.toggleAuth('login');
         }
 
+        window.forgotPassword = function(e) {
+            e.preventDefault();
+            let fId = document.getElementById('forgotId').value.trim();
+            let fName = document.getElementById('forgotName').value.trim();
+            let fPass = document.getElementById('forgotPass').value;
+
+            let userIndex = window.users.findIndex(u => u.id === fId && u.name.toLowerCase() === fName.toLowerCase());
+            
+            if(userIndex !== -1) {
+                if(window.users[userIndex].role === 'superadmin') {
+                    return alert("Super Admin password cannot be reset from here for security reasons.");
+                }
+                window.users[userIndex].pass = fPass;
+                window.users[userIndex].approved = false; // Need admin approval again
+                window.saveData();
+                alert("Password reset! For security, Super Admin must re-approve your account.");
+                e.target.reset();
+                window.toggleAuth('login');
+            } else {
+                alert("User ID and Name do not match our records!");
+            }
+        }
+
         window.login = function(e) {
             e.preventDefault();
             let uId = document.getElementById('loginId').value.trim();
@@ -237,7 +299,7 @@
             let user = window.users.find(u => u.id === uId && u.pass === uPass);
             
             if(!user) return alert("Invalid User ID or Password!");
-            if(!user.approved) return alert("Access Denied! Account pending approval.");
+            if(!user.approved) return alert("Access Denied! Account pending approval from Super Admin.");
 
             window.loggedInUser = user;
             document.getElementById('authScreen').classList.add('hidden');
@@ -253,9 +315,27 @@
 
         window.logout = function() { location.reload(); }
 
+        // --- CHANGE PASSWORD LOGIC (AFTER LOGIN) ---
+        window.changePassword = function(e) {
+            e.preventDefault();
+            let oldP = document.getElementById('oldPass').value;
+            let newP = document.getElementById('newPass').value;
+
+            if(window.loggedInUser.pass !== oldP) return alert("Incorrect Current Password!");
+            
+            let uIndex = window.users.findIndex(u => u.id === window.loggedInUser.id);
+            if(uIndex !== -1) {
+                window.users[uIndex].pass = newP;
+                window.saveData();
+                alert("Password changed successfully!");
+                e.target.reset();
+                window.showSection('dashboard');
+            }
+        }
+
         // --- NAV ---
         window.showSection = function(id) {
-            ['dashboard', 'addBookSection', 'studentsSection', 'issueSection', 'adminApprovalSection'].forEach(sec => {
+            ['dashboard', 'addBookSection', 'studentsSection', 'issueSection', 'adminApprovalSection', 'changePasswordSection'].forEach(sec => {
                 document.getElementById(sec).classList.add('hidden');
             });
             document.getElementById(id).classList.remove('hidden');
@@ -274,6 +354,16 @@
             window.saveData();
             e.target.reset();
             alert("Book Added!");
+        }
+
+        window.deleteBookRecord = function(bookId) {
+            if(confirm("Are you sure you want to delete this book permanently?")) {
+                let index = window.books.findIndex(b => b.id === bookId);
+                if(index !== -1) {
+                    window.books.splice(index, 1);
+                    window.saveData();
+                }
+            }
         }
 
         window.registerStudent = function(e) {
@@ -295,17 +385,19 @@
             let bookIndex = window.books.findIndex(b => b.id === bId);
             
             if(bookIndex === -1) return alert("Book not found!");
-            if(window.books[bookIndex].copies < 1) return alert("No copies available!");
+            if(window.books[bookIndex].copies < 1) return alert("No copies available to issue!");
             if(!window.students.find(s => s.id === sId)) return alert("Student not registered!");
 
+            // AUTOMATIC QUANTITY UPDATE (Decreases here)
             window.books[bookIndex].copies -= 1;
+            
             window.issues.push({
                 id: window.issues.length > 0 ? window.issues[window.issues.length-1].id + 1 : 5001,
                 bId: bId, sId: sId, status: 'Issued', issuedBy: window.loggedInUser.name
             });
             window.saveData();
             e.target.reset();
-            alert("Book Issued!");
+            alert("Book Issued! Quantity has been automatically updated.");
         }
 
         window.returnBook = function(e) {
@@ -314,15 +406,16 @@
             let issueIndex = window.issues.findIndex(i => i.id === iId);
             
             if(issueIndex === -1) return alert("Issue Record not found!");
-            if(window.issues[issueIndex].status === 'Returned') return alert("Already returned!");
+            if(window.issues[issueIndex].status === 'Returned') return alert("Book is already marked as returned!");
 
+            // AUTOMATIC QUANTITY UPDATE (Increases here)
             window.issues[issueIndex].status = 'Returned';
             let bookIndex = window.books.findIndex(b => b.id === window.issues[issueIndex].bId);
             if(bookIndex !== -1) window.books[bookIndex].copies += 1;
 
             window.saveData();
             e.target.reset();
-            alert("Book Returned!");
+            alert("Book Returned! Quantity has been automatically updated.");
         }
 
         // --- UI RENDER ---
@@ -334,7 +427,8 @@
             const tbody = document.getElementById('booksTableBody');
             tbody.innerHTML = '';
             window.books.filter(b => b.title.toLowerCase().includes(search) || b.id.toString().includes(search)).forEach(b => {
-                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 border">${b.id}</td><td class="p-3 border font-semibold">${b.title}</td><td class="p-3 border">${b.author}</td><td class="p-3 border text-green-600 font-bold">${b.copies}</td></tr>`;
+                let deleteBtn = `<button onclick="window.deleteBookRecord(${b.id})" class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 font-bold">Delete</button>`;
+                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 border">${b.id}</td><td class="p-3 border font-semibold">${b.title}</td><td class="p-3 border">${b.author}</td><td class="p-3 border text-green-700 font-bold bg-green-50">${b.copies}</td><td class="p-3 border text-center">${deleteBtn}</td></tr>`;
             });
             
             const sList = document.getElementById('studentList');
@@ -344,7 +438,7 @@
             const iBody = document.getElementById('issueRecordsTableBody');
             iBody.innerHTML = '';
             window.issues.slice().reverse().forEach(i => {
-                let color = i.status === 'Issued' ? 'text-orange-500' : 'text-green-500';
+                let color = i.status === 'Issued' ? 'text-orange-600 bg-orange-50' : 'text-green-600 bg-green-50';
                 iBody.innerHTML += `<tr class="border-b"><td class="p-3 border">${i.id}</td><td class="p-3 border">${i.bId}</td><td class="p-3 border">${i.sId}</td><td class="p-3 border font-bold ${color}">${i.status}</td><td class="p-3 border text-gray-500">${i.issuedBy}</td></tr>`;
             });
             window.renderTeachers();
