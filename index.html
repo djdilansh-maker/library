@@ -8,7 +8,7 @@
     <style>
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .hidden { display: none; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
@@ -17,72 +17,85 @@
     <nav class="bg-blue-900 text-white p-4 shadow-lg flex justify-between items-center">
         <div>
             <h1 class="text-xl font-bold tracking-wider">Emmanuel Senior Secondary School</h1>
-            <p class="text-xs text-blue-200">Library Management System</p>
+            <p class="text-xs text-blue-200">Library Management System <span id="currentUserDisplay" class="ml-2 font-bold text-yellow-300"></span></p>
         </div>
-        <div id="navButtons" class="hidden space-x-2">
+        <div id="navButtons" class="hidden space-x-2 flex-wrap">
             <button onclick="showSection('dashboard')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Home</button>
             <button onclick="showSection('addBookSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Add Book</button>
-            <button onclick="showSection('studentsSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Register Student</button>
+            <button onclick="showSection('studentsSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Students</button>
             <button onclick="showSection('issueSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Issue/Return</button>
-            <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded text-sm hover:bg-red-600 font-bold">8. Exit (Logout)</button>
+            <!-- Only visible to Super Admin -->
+            <button id="manageAdminsBtn" onclick="showSection('adminApprovalSection')" class="bg-purple-600 px-3 py-1 rounded text-sm hover:bg-purple-500 hidden font-bold">Manage Teachers</button>
+            <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded text-sm hover:bg-red-600 font-bold">Logout</button>
         </div>
     </nav>
 
-    <!-- 1. LOGIN SCREEN -->
-    <div id="loginScreen" class="container mx-auto mt-20 flex justify-center fade-in">
+    <!-- 1. LOGIN & REGISTRATION SCREEN -->
+    <div id="authScreen" class="container mx-auto mt-20 flex justify-center fade-in">
         <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm border-t-4 border-blue-900">
-            <h2 class="text-2xl font-bold text-center mb-6">Admin Login</h2>
-            <form onsubmit="login(event)">
-                <input type="text" id="username" required placeholder="Admin ID (admin)" class="w-full mb-4 p-2 border rounded">
-                <input type="password" id="password" required placeholder="Password (admin)" class="w-full mb-6 p-2 border rounded">
-                <button type="submit" class="w-full bg-blue-900 text-white font-bold py-2 rounded hover:bg-blue-800">Login</button>
-            </form>
+            
+            <!-- Login Form -->
+            <div id="loginDiv">
+                <h2 class="text-2xl font-bold text-center mb-6">Staff Login</h2>
+                <form onsubmit="login(event)">
+                    <input type="text" id="loginId" required placeholder="User ID" class="w-full mb-4 p-2 border rounded focus:ring-2 focus:ring-blue-500">
+                    <input type="password" id="loginPass" required placeholder="Password" class="w-full mb-6 p-2 border rounded focus:ring-2 focus:ring-blue-500">
+                    <button type="submit" class="w-full bg-blue-900 text-white font-bold py-2 rounded hover:bg-blue-800">Login</button>
+                </form>
+                <div class="text-center mt-4 border-t pt-4">
+                    <p class="text-sm text-gray-600">New Teacher?</p>
+                    <button onclick="toggleAuth('register')" class="text-blue-600 font-bold hover:underline">Request Admin Access</button>
+                </div>
+            </div>
+
+            <!-- Teacher Registration Form -->
+            <div id="registerDiv" class="hidden">
+                <h2 class="text-xl font-bold text-center mb-2">Request Access</h2>
+                <p class="text-xs text-center text-red-500 mb-4">Requires Super Admin Approval</p>
+                <form onsubmit="registerTeacher(event)">
+                    <input type="text" id="regName" required placeholder="Full Name" class="w-full mb-3 p-2 border rounded">
+                    <input type="text" id="regId" required placeholder="Desired User ID" class="w-full mb-3 p-2 border rounded">
+                    <input type="password" id="regPass" required placeholder="Create Password" class="w-full mb-4 p-2 border rounded">
+                    <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700">Submit Request</button>
+                </form>
+                <div class="text-center mt-4 border-t pt-4">
+                    <button onclick="toggleAuth('login')" class="text-blue-600 font-bold hover:underline">Back to Login</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- MAIN APP WRAPPER -->
     <div id="mainApp" class="container mx-auto mt-6 p-4 hidden">
         
-        <!-- 2. & 3. DISPLAY & SEARCH BOOKS (DASHBOARD) -->
+        <!-- DASHBOARD (Books & Issues) -->
         <div id="dashboard" class="fade-in">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-gray-700">2. Available Books</h2>
-                <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="3. Search by Title/ID..." class="p-2 border rounded w-64 shadow-sm">
+                <h2 class="text-2xl font-bold text-gray-700">Available Books</h2>
+                <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="Search by Title/ID..." class="p-2 border rounded w-64 shadow-sm">
             </div>
-            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto mb-8">
                 <table class="w-full table-auto border-collapse text-sm">
                     <thead>
-                        <tr class="bg-gray-200 text-gray-700 text-left">
-                            <th class="p-3 border">Book ID</th>
-                            <th class="p-3 border">Title</th>
-                            <th class="p-3 border">Author</th>
-                            <th class="p-3 border">Available Copies</th>
-                        </tr>
+                        <tr class="bg-gray-200 text-gray-700 text-left"><th class="p-3 border">Book ID</th><th class="p-3 border">Title</th><th class="p-3 border">Author</th><th class="p-3 border">Available Copies</th></tr>
                     </thead>
                     <tbody id="booksTableBody"></tbody>
                 </table>
             </div>
-            
-            <!-- 7. VIEW ISSUE RECORDS -->
-            <h2 class="text-2xl font-bold text-gray-700 mt-8 mb-4">7. View Issue Records</h2>
+            <h2 class="text-2xl font-bold text-gray-700 mb-4">Issue Records</h2>
             <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
                 <table class="w-full table-auto border-collapse text-sm">
                     <thead>
-                        <tr class="bg-gray-200 text-gray-700 text-left">
-                            <th class="p-3 border">Issue ID</th>
-                            <th class="p-3 border">Book ID</th>
-                            <th class="p-3 border">Student ID</th>
-                            <th class="p-3 border">Status</th>
-                        </tr>
+                        <tr class="bg-gray-200 text-gray-700 text-left"><th class="p-3 border">Issue ID</th><th class="p-3 border">Book ID</th><th class="p-3 border">Student ID</th><th class="p-3 border">Status</th><th class="p-3 border">Issued By</th></tr>
                     </thead>
                     <tbody id="issueRecordsTableBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 1. ADD BOOK SECTION -->
+        <!-- ADD BOOK SECTION -->
         <div id="addBookSection" class="hidden fade-in bg-white p-6 rounded-lg shadow max-w-lg mx-auto">
-            <h2 class="text-xl font-bold mb-4">1. Add New Book</h2>
+            <h2 class="text-xl font-bold mb-4">Add New Book</h2>
             <form onsubmit="addBook(event)">
                 <input type="text" id="bookTitle" required placeholder="Book Title" class="w-full mb-3 p-2 border rounded">
                 <input type="text" id="bookAuthor" required placeholder="Author Name" class="w-full mb-3 p-2 border rounded">
@@ -91,9 +104,9 @@
             </form>
         </div>
 
-        <!-- 4. REGISTER STUDENT -->
+        <!-- REGISTER STUDENT -->
         <div id="studentsSection" class="hidden fade-in bg-white p-6 rounded-lg shadow max-w-lg mx-auto">
-            <h2 class="text-xl font-bold mb-4">4. Register Student</h2>
+            <h2 class="text-xl font-bold mb-4">Register Student</h2>
             <form onsubmit="registerStudent(event)">
                 <input type="text" id="studentName" required placeholder="Student Name" class="w-full mb-3 p-2 border rounded">
                 <input type="text" id="studentClass" required placeholder="Class & Section (e.g. 12-A)" class="w-full mb-4 p-2 border rounded">
@@ -105,62 +118,133 @@
             </div>
         </div>
 
-        <!-- 5 & 6. ISSUE / RETURN BOOK -->
+        <!-- ISSUE / RETURN BOOK -->
         <div id="issueSection" class="hidden fade-in grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Issue -->
             <div class="bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-bold mb-4 text-orange-600">5. Issue Book</h2>
+                <h2 class="text-xl font-bold mb-4 text-orange-600">Issue Book</h2>
                 <form onsubmit="issueBook(event)">
                     <input type="number" id="issueBookId" required placeholder="Book ID" class="w-full mb-3 p-2 border rounded">
                     <input type="number" id="issueStudentId" required placeholder="Student ID" class="w-full mb-4 p-2 border rounded">
                     <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 rounded hover:bg-orange-600">Issue Book</button>
                 </form>
             </div>
-            <!-- Return -->
             <div class="bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-bold mb-4 text-green-600">6. Return Book</h2>
+                <h2 class="text-xl font-bold mb-4 text-green-600">Return Book</h2>
                 <form onsubmit="returnBook(event)">
                     <input type="number" id="returnIssueId" required placeholder="Issue Record ID" class="w-full mb-4 p-2 border rounded">
                     <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 rounded hover:bg-green-600">Return Book</button>
                 </form>
             </div>
         </div>
+
+        <!-- SUPER ADMIN: TEACHER APPROVAL SECTION -->
+        <div id="adminApprovalSection" class="hidden fade-in bg-white p-6 rounded-lg shadow max-w-4xl mx-auto border-t-4 border-purple-600">
+            <h2 class="text-2xl font-bold mb-4 text-purple-700">Teacher & Admin Management</h2>
+            <p class="text-sm text-gray-600 mb-4">Approve or reject staff access requests here.</p>
+            <table class="w-full table-auto border-collapse text-sm mb-6">
+                <thead>
+                    <tr class="bg-gray-200 text-left">
+                        <th class="p-3 border">User ID</th>
+                        <th class="p-3 border">Name</th>
+                        <th class="p-3 border">Status</th>
+                        <th class="p-3 border">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="teachersTableBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        // Database simulation using LocalStorage
+        // --- Database Arrays ---
+        let users = JSON.parse(localStorage.getItem('lib_users')) || [
+            // Default Super Admin - cannot be deleted
+            { id: 'admin', pass: 'admin', name: 'Super Admin', role: 'superadmin', approved: true }
+        ];
         let books = JSON.parse(localStorage.getItem('lib_books')) || [];
         let students = JSON.parse(localStorage.getItem('lib_students')) || [];
         let issues = JSON.parse(localStorage.getItem('lib_issues')) || [];
+        let loggedInUser = null;
 
         function saveData() {
+            localStorage.setItem('lib_users', JSON.stringify(users));
             localStorage.setItem('lib_books', JSON.stringify(books));
             localStorage.setItem('lib_students', JSON.stringify(students));
             localStorage.setItem('lib_issues', JSON.stringify(issues));
             renderAll();
         }
 
-        // --- Auth ---
+        // --- Auth System ---
+        function toggleAuth(type) {
+            if(type === 'register') {
+                document.getElementById('loginDiv').classList.add('hidden');
+                document.getElementById('registerDiv').classList.remove('hidden');
+            } else {
+                document.getElementById('registerDiv').classList.add('hidden');
+                document.getElementById('loginDiv').classList.remove('hidden');
+            }
+        }
+
+        function registerTeacher(e) {
+            e.preventDefault();
+            let rId = document.getElementById('regId').value.trim();
+            let rName = document.getElementById('regName').value.trim();
+            let rPass = document.getElementById('regPass').value;
+
+            // Check if ID exists
+            if(users.find(u => u.id === rId)) {
+                return alert("User ID already exists! Please choose a different one.");
+            }
+
+            users.push({ id: rId, pass: rPass, name: rName, role: 'teacher', approved: false });
+            saveData();
+            e.target.reset();
+            alert("Request submitted successfully! Wait for Super Admin to approve your account.");
+            toggleAuth('login');
+        }
+
         function login(e) {
             e.preventDefault();
-            if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === '1234') {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('mainApp').classList.remove('hidden');
-                document.getElementById('navButtons').classList.remove('hidden');
-                renderAll();
-            } else { alert("Wrong credentials!"); }
+            let uId = document.getElementById('loginId').value.trim();
+            let uPass = document.getElementById('loginPass').value;
+            
+            let user = users.find(u => u.id === uId && u.pass === uPass);
+            
+            if(!user) {
+                return alert("Invalid User ID or Password!");
+            }
+            if(!user.approved) {
+                return alert("Access Denied! Your account is still pending approval from the Super Admin.");
+            }
+
+            // Success Login
+            loggedInUser = user;
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('navButtons').classList.remove('hidden');
+            document.getElementById('currentUserDisplay').innerText = `(Logged in as: ${user.name})`;
+
+            // Show Manage Admins button only to superadmin
+            if(user.role === 'superadmin') {
+                document.getElementById('manageAdminsBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('manageAdminsBtn').classList.add('hidden');
+            }
+            renderAll();
         }
+
         function logout() { location.reload(); }
 
         // --- Navigation ---
         function showSection(id) {
-            ['dashboard', 'addBookSection', 'studentsSection', 'issueSection'].forEach(sec => {
+            ['dashboard', 'addBookSection', 'studentsSection', 'issueSection', 'adminApprovalSection'].forEach(sec => {
                 document.getElementById(sec).classList.add('hidden');
             });
             document.getElementById(id).classList.remove('hidden');
+            if(id === 'adminApprovalSection') renderTeachers();
         }
 
-        // --- 1. Add Book ---
+        // --- Library Logic ---
         function addBook(e) {
             e.preventDefault();
             books.push({
@@ -174,7 +258,6 @@
             alert("Book Added!");
         }
 
-        // --- 4. Register Student ---
         function registerStudent(e) {
             e.preventDefault();
             students.push({
@@ -187,13 +270,12 @@
             alert("Student Registered!");
         }
 
-        // --- 5. Issue Book ---
         function issueBook(e) {
             e.preventDefault();
             let bId = parseInt(document.getElementById('issueBookId').value);
             let sId = parseInt(document.getElementById('issueStudentId').value);
-            
             let bookIndex = books.findIndex(b => b.id === bId);
+            
             if(bookIndex === -1) return alert("Book not found!");
             if(books[bookIndex].copies < 1) return alert("No copies available!");
             if(!students.find(s => s.id === sId)) return alert("Student not registered!");
@@ -201,14 +283,13 @@
             books[bookIndex].copies -= 1;
             issues.push({
                 id: issues.length > 0 ? issues[issues.length-1].id + 1 : 5001,
-                bId: bId, sId: sId, status: 'Issued'
+                bId: bId, sId: sId, status: 'Issued', issuedBy: loggedInUser.name
             });
             e.target.reset();
             saveData();
-            alert("Book Issued Successfully!");
+            alert("Book Issued!");
         }
 
-        // --- 6. Return Book ---
         function returnBook(e) {
             e.preventDefault();
             let iId = parseInt(document.getElementById('returnIssueId').value);
@@ -223,34 +304,71 @@
 
             e.target.reset();
             saveData();
-            alert("Book Returned Successfully!");
+            alert("Book Returned!");
         }
 
-        // --- 2, 3, 7. Display, Search & View Records ---
+        // --- UI Rendering ---
         function renderAll() {
-            // Render Books
+            // Books
             const search = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : "";
             const tbody = document.getElementById('booksTableBody');
             tbody.innerHTML = '';
             books.filter(b => b.title.toLowerCase().includes(search) || b.id.toString().includes(search)).forEach(b => {
-                tbody.innerHTML += `<tr class="border-b"><td class="p-3 border">${b.id}</td><td class="p-3 border font-semibold">${b.title}</td><td class="p-3 border">${b.author}</td><td class="p-3 border text-green-600 font-bold">${b.copies}</td></tr>`;
+                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 border">${b.id}</td><td class="p-3 border font-semibold">${b.title}</td><td class="p-3 border">${b.author}</td><td class="p-3 border text-green-600 font-bold">${b.copies}</td></tr>`;
             });
-
-            // Render Students
+            // Students
             const sList = document.getElementById('studentList');
             sList.innerHTML = '';
-            students.forEach(s => sList.innerHTML += `<li>ID: ${s.id} | Name: ${s.name} (${s.cls})</li>`);
-
-            // Render Issues
+            students.forEach(s => sList.innerHTML += `<li class="py-1">ID: <span class="font-bold">${s.id}</span> | Name: ${s.name} (${s.cls})</li>`);
+            // Issues
             const iBody = document.getElementById('issueRecordsTableBody');
             iBody.innerHTML = '';
             issues.slice().reverse().forEach(i => {
                 let color = i.status === 'Issued' ? 'text-orange-500' : 'text-green-500';
-                iBody.innerHTML += `<tr class="border-b"><td class="p-3 border">${i.id}</td><td class="p-3 border">${i.bId}</td><td class="p-3 border">${i.sId}</td><td class="p-3 border font-bold ${color}">${i.status}</td></tr>`;
+                iBody.innerHTML += `<tr class="border-b"><td class="p-3 border">${i.id}</td><td class="p-3 border">${i.bId}</td><td class="p-3 border">${i.sId}</td><td class="p-3 border font-bold ${color}">${i.status}</td><td class="p-3 border text-gray-500">${i.issuedBy}</td></tr>`;
             });
+            renderTeachers();
         }
 
         function searchBooks() { renderAll(); }
+
+        // --- Super Admin Manage Teachers ---
+        function renderTeachers() {
+            if(!loggedInUser || loggedInUser.role !== 'superadmin') return;
+            const tBody = document.getElementById('teachersTableBody');
+            tBody.innerHTML = '';
+            users.forEach((u, index) => {
+                if(u.role === 'superadmin') return; // Hide super admin from the list
+                let statusBadge = u.approved ? '<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">Approved</span>' : '<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-bold">Pending</span>';
+                let actionBtn = !u.approved 
+                    ? `<button onclick="approveTeacher('${u.id}')" class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600 font-bold">Approve</button>`
+                    : `<button onclick="revokeTeacher('${u.id}')" class="bg-orange-500 text-white px-3 py-1 rounded text-xs hover:bg-orange-600 font-bold">Revoke</button>`;
+                
+                tBody.innerHTML += `<tr class="border-b hover:bg-gray-50">
+                    <td class="p-3 border font-semibold">${u.id}</td>
+                    <td class="p-3 border">${u.name}</td>
+                    <td class="p-3 border">${statusBadge}</td>
+                    <td class="p-3 border">${actionBtn} <button onclick="deleteTeacher(${index})" class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 font-bold ml-1">Delete</button></td>
+                </tr>`;
+            });
+        }
+
+        function approveTeacher(id) {
+            let u = users.find(user => user.id === id);
+            if(u) { u.approved = true; saveData(); }
+        }
+        
+        function revokeTeacher(id) {
+            let u = users.find(user => user.id === id);
+            if(u) { u.approved = false; saveData(); }
+        }
+
+        function deleteTeacher(index) {
+            if(confirm("Delete this staff member permanently?")) {
+                users.splice(index, 1);
+                saveData();
+            }
+        }
     </script>
 </body>
 </html>
