@@ -1,225 +1,256 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EMMANUEL SENIOR SECONDARY SCHOOL, TONK - 304001</title>
-
-  <!-- Google font (optional) -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --brown:#7a2f21;
-      --orange:#f59b2b;
-      --bg:#ffffff;
-      --muted:#666;
-      --max-width:1000px;
-      --radius:10px;
-    }
-    *{box-sizing:border-box;font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
-    body{
-      margin:0;
-      background:linear-gradient(180deg,#fff 0%, #fffaf0 100%);
-      color:#222;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    .container{
-      max-width:var(--max-width);
-      margin:28px auto;
-      padding:20px;
-    }
-
-    header.site-header{
-      background: #fff;
-      border-radius: var(--radius);
-      padding:18px;
-      display:flex;
-      align-items:center;
-      gap:18px;
-      box-shadow:0 6px 18px rgba(45,35,25,0.07);
-    }
-    header .logo {
-      width:120px;
-      height:120px;
-      flex:0 0 120px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    header .logo img{
-      max-width:100%;
-      max-height:100%;
-      display:block;
-    }
-    header .title{
-      flex:1;
-    }
-    .title h1{
-      margin:0;
-      color:var(--brown);
-      letter-spacing:1px;
-      font-size:1.45rem;
-      font-weight:700;
-    }
-    .title p{
-      margin:6px 0 0 0;
-      color:var(--muted);
-      font-size:.95rem;
-    }
-
-    nav.top-nav{
-      margin-top:14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    nav a{
-      text-decoration:none;
-      color:var(--brown);
-      background:linear-gradient(90deg, rgba(245,155,43,0.06), rgba(122,47,33,0.02));
-      padding:8px 12px;
-      border-radius:8px;
-      font-weight:500;
-      border:1px solid rgba(122,47,33,0.06);
-    }
-
-    main.card{
-      margin-top:18px;
-      background:#fff;
-      padding:18px;
-      border-radius:var(--radius);
-      box-shadow:0 6px 16px rgba(35,25,15,0.04);
-    }
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 320px;
-      gap:18px;
-    }
-
-    section h2{
-      margin:0 0 8px 0;
-      color:var(--brown);
-    }
-    .info p{color:var(--muted);line-height:1.6}
-    .contacts, .quick{
-      background:linear-gradient(180deg,#fff 0%, #fffaf7 100%);
-      padding:14px;
-      border-radius:8px;
-      border:1px solid rgba(122,47,33,0.04);
-    }
-    .contacts strong{display:block;color:var(--brown);margin-bottom:6px}
-    footer{
-      margin-top:18px;
-      text-align:center;
-      color:var(--muted);
-      font-size:.9rem;
-    }
-
-    /* Responsive */
-    @media (max-width:880px){
-      .grid{grid-template-columns:1fr;}
-      header{flex-direction:row}
-      header .logo{width:88px;height:88px}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - Emmanuel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { display: none; }
+    </style>
 </head>
-<body>
-  <div class="container">
+<body class="bg-gray-100 text-gray-800 font-sans">
 
-    <!-- Header with logo -->
-    <header class="site-header" role="banner">
-      <!-- Save the provided logo image as "logo.png" in the same folder as this index.html -->
-      <div class="logo" aria-hidden="false">
-        <img src="logo.png" alt="Emmanuel Senior Secondary School logo">
-      </div>
-
-      <div class="title">
-        <h1>EMMANUEL SENIOR SECONDARY SCHOOL</h1>
-        <p>Tonk - 304001 &nbsp; | &nbsp; Affiliated School • CBSE/State (add exact affiliation if needed)</p>
-
-        <nav class="top-nav" aria-label="Main navigation">
-          <a href="#about">About</a>
-          <a href="#academics">Academics</a>
-          <a href="#library">Library</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </div>
-    </header>
-
-    <main class="card" role="main">
-      <div class="grid">
-
-        <!-- Left column: main content -->
+    <!-- Navbar -->
+    <nav class="bg-blue-900 text-white p-4 shadow-lg flex justify-between items-center">
         <div>
-          <section id="about" class="info">
-            <h2>About Emmanuel Senior Secondary School</h2>
-            <p>
-              Emmanuel Senior Secondary School, located in Tonk (PIN 304001), is committed to providing quality education and holistic development.
-              The school focuses on academic excellence, moral values, and extracurricular growth. Our motto "God With Us" guides our work with students,
-              parents, and the community to build responsible citizens of the future.
-            </p>
-          </section>
+            <h1 class="text-xl font-bold tracking-wider">Emmanuel Senior Secondary School</h1>
+            <p class="text-xs text-blue-200">Library Management System</p>
+        </div>
+        <div id="navButtons" class="hidden space-x-2">
+            <button onclick="showSection('dashboard')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Home</button>
+            <button onclick="showSection('addBookSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Add Book</button>
+            <button onclick="showSection('studentsSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Register Student</button>
+            <button onclick="showSection('issueSection')" class="bg-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-600">Issue/Return</button>
+            <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded text-sm hover:bg-red-600 font-bold">8. Exit (Logout)</button>
+        </div>
+    </nav>
 
-          <section id="academics" style="margin-top:16px;">
-            <h2>Academics & Co-curricular</h2>
-            <p>
-              We offer classes through primary to senior secondary level, with a strong emphasis on science and computer education.
-              Students are encouraged to participate in sports, arts, debate, and technology clubs. Experienced teachers and modern classrooms
-              support student learning and critical thinking.
-            </p>
-          </section>
+    <!-- 1. LOGIN SCREEN -->
+    <div id="loginScreen" class="container mx-auto mt-20 flex justify-center fade-in">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm border-t-4 border-blue-900">
+            <h2 class="text-2xl font-bold text-center mb-6">Admin Login</h2>
+            <form onsubmit="login(event)">
+                <input type="text" id="username" required placeholder="Admin ID (admin)" class="w-full mb-4 p-2 border rounded">
+                <input type="password" id="password" required placeholder="Password (admin)" class="w-full mb-6 p-2 border rounded">
+                <button type="submit" class="w-full bg-blue-900 text-white font-bold py-2 rounded hover:bg-blue-800">Login</button>
+            </form>
+        </div>
+    </div>
 
-          <section id="library" style="margin-top:16px;">
-            <h2>Library & Projects</h2>
-            <p>
-              The school library houses physical books across subjects and supports student projects such as the "Library Management System"
-              developed using Python and MySQL. For the project code and live demo, visit our GitHub repository (link below).
-            </p>
-
-            <p><strong>Project / Demo:</strong>
-              <a href="https://github.com/YOUR-USERNAME/library-management-school" target="_blank" rel="noopener">View code on GitHub</a>
-            </p>
-          </section>
+    <!-- MAIN APP WRAPPER -->
+    <div id="mainApp" class="container mx-auto mt-6 p-4 hidden">
+        
+        <!-- 2. & 3. DISPLAY & SEARCH BOOKS (DASHBOARD) -->
+        <div id="dashboard" class="fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-700">2. Available Books</h2>
+                <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="3. Search by Title/ID..." class="p-2 border rounded w-64 shadow-sm">
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                <table class="w-full table-auto border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700 text-left">
+                            <th class="p-3 border">Book ID</th>
+                            <th class="p-3 border">Title</th>
+                            <th class="p-3 border">Author</th>
+                            <th class="p-3 border">Available Copies</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTableBody"></tbody>
+                </table>
+            </div>
+            
+            <!-- 7. VIEW ISSUE RECORDS -->
+            <h2 class="text-2xl font-bold text-gray-700 mt-8 mb-4">7. View Issue Records</h2>
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                <table class="w-full table-auto border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700 text-left">
+                            <th class="p-3 border">Issue ID</th>
+                            <th class="p-3 border">Book ID</th>
+                            <th class="p-3 border">Student ID</th>
+                            <th class="p-3 border">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="issueRecordsTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Right column: contact & quick facts -->
-        <aside>
-          <div class="contacts" id="contact" aria-labelledby="contact-heading">
-            <h2 id="contact-heading">Contact & Address</h2>
-            <strong>EMMANUEL SENIOR SECONDARY SCHOOL</strong>
-            <p>Address: Tonk, Rajasthan - 304001</p>
-            <p>Phone: +91 - [add phone]</p>
-            <p>Email: info@emmanuel-school.example (replace with real email)</p>
-          </div>
+        <!-- 1. ADD BOOK SECTION -->
+        <div id="addBookSection" class="hidden fade-in bg-white p-6 rounded-lg shadow max-w-lg mx-auto">
+            <h2 class="text-xl font-bold mb-4">1. Add New Book</h2>
+            <form onsubmit="addBook(event)">
+                <input type="text" id="bookTitle" required placeholder="Book Title" class="w-full mb-3 p-2 border rounded">
+                <input type="text" id="bookAuthor" required placeholder="Author Name" class="w-full mb-3 p-2 border rounded">
+                <input type="number" id="bookCopies" min="1" required placeholder="Total Copies" class="w-full mb-4 p-2 border rounded">
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700">Add Book</button>
+            </form>
+        </div>
 
-          <div class="quick" style="margin-top:12px;">
-            <h2>Quick Facts</h2>
-            <ul style="margin:0;padding-left:18px;color:var(--muted);line-height:1.6">
-              <li>Founded: [Year]</li>
-              <li>Affiliation: CBSE / (specify)</li>
-              <li>Medium: English / Hindi</li>
-              <li>Focus: Academics, Discipline & Values</li>
-            </ul>
-          </div>
-        </aside>
+        <!-- 4. REGISTER STUDENT -->
+        <div id="studentsSection" class="hidden fade-in bg-white p-6 rounded-lg shadow max-w-lg mx-auto">
+            <h2 class="text-xl font-bold mb-4">4. Register Student</h2>
+            <form onsubmit="registerStudent(event)">
+                <input type="text" id="studentName" required placeholder="Student Name" class="w-full mb-3 p-2 border rounded">
+                <input type="text" id="studentClass" required placeholder="Class & Section (e.g. 12-A)" class="w-full mb-4 p-2 border rounded">
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700">Register Student</button>
+            </form>
+            <div class="mt-6 border-t pt-4">
+                <h3 class="font-bold text-gray-600 mb-2">Registered Students</h3>
+                <ul id="studentList" class="text-sm list-disc pl-5"></ul>
+            </div>
+        </div>
 
-      </div>
-    </main>
+        <!-- 5 & 6. ISSUE / RETURN BOOK -->
+        <div id="issueSection" class="hidden fade-in grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Issue -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-bold mb-4 text-orange-600">5. Issue Book</h2>
+                <form onsubmit="issueBook(event)">
+                    <input type="number" id="issueBookId" required placeholder="Book ID" class="w-full mb-3 p-2 border rounded">
+                    <input type="number" id="issueStudentId" required placeholder="Student ID" class="w-full mb-4 p-2 border rounded">
+                    <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 rounded hover:bg-orange-600">Issue Book</button>
+                </form>
+            </div>
+            <!-- Return -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-bold mb-4 text-green-600">6. Return Book</h2>
+                <form onsubmit="returnBook(event)">
+                    <input type="number" id="returnIssueId" required placeholder="Issue Record ID" class="w-full mb-4 p-2 border rounded">
+                    <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 rounded hover:bg-green-600">Return Book</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <footer>
-      <div>© <span id="year"></span> Emmanuel Senior Secondary School, Tonk • All rights reserved.</div>
-      <div style="margin-top:6px;font-size:.85rem">
-        Site by School IT Department • To publish this site using GitHub Pages, push these files (index.html and logo.png) to your repository's main branch.
-      </div>
-    </footer>
+    <script>
+        // Database simulation using LocalStorage
+        let books = JSON.parse(localStorage.getItem('lib_books')) || [];
+        let students = JSON.parse(localStorage.getItem('lib_students')) || [];
+        let issues = JSON.parse(localStorage.getItem('lib_issues')) || [];
 
-  </div>
+        function saveData() {
+            localStorage.setItem('lib_books', JSON.stringify(books));
+            localStorage.setItem('lib_students', JSON.stringify(students));
+            localStorage.setItem('lib_issues', JSON.stringify(issues));
+            renderAll();
+        }
 
-  <script>
-    // Set current year in footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+        // --- Auth ---
+        function login(e) {
+            e.preventDefault();
+            if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === '1234') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                document.getElementById('navButtons').classList.remove('hidden');
+                renderAll();
+            } else { alert("Wrong credentials!"); }
+        }
+        function logout() { location.reload(); }
+
+        // --- Navigation ---
+        function showSection(id) {
+            ['dashboard', 'addBookSection', 'studentsSection', 'issueSection'].forEach(sec => {
+                document.getElementById(sec).classList.add('hidden');
+            });
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        // --- 1. Add Book ---
+        function addBook(e) {
+            e.preventDefault();
+            books.push({
+                id: books.length > 0 ? books[books.length-1].id + 1 : 101,
+                title: document.getElementById('bookTitle').value,
+                author: document.getElementById('bookAuthor').value,
+                copies: parseInt(document.getElementById('bookCopies').value)
+            });
+            e.target.reset();
+            saveData();
+            alert("Book Added!");
+        }
+
+        // --- 4. Register Student ---
+        function registerStudent(e) {
+            e.preventDefault();
+            students.push({
+                id: students.length > 0 ? students[students.length-1].id + 1 : 1,
+                name: document.getElementById('studentName').value,
+                cls: document.getElementById('studentClass').value
+            });
+            e.target.reset();
+            saveData();
+            alert("Student Registered!");
+        }
+
+        // --- 5. Issue Book ---
+        function issueBook(e) {
+            e.preventDefault();
+            let bId = parseInt(document.getElementById('issueBookId').value);
+            let sId = parseInt(document.getElementById('issueStudentId').value);
+            
+            let bookIndex = books.findIndex(b => b.id === bId);
+            if(bookIndex === -1) return alert("Book not found!");
+            if(books[bookIndex].copies < 1) return alert("No copies available!");
+            if(!students.find(s => s.id === sId)) return alert("Student not registered!");
+
+            books[bookIndex].copies -= 1;
+            issues.push({
+                id: issues.length > 0 ? issues[issues.length-1].id + 1 : 5001,
+                bId: bId, sId: sId, status: 'Issued'
+            });
+            e.target.reset();
+            saveData();
+            alert("Book Issued Successfully!");
+        }
+
+        // --- 6. Return Book ---
+        function returnBook(e) {
+            e.preventDefault();
+            let iId = parseInt(document.getElementById('returnIssueId').value);
+            let issueIndex = issues.findIndex(i => i.id === iId);
+            
+            if(issueIndex === -1) return alert("Issue Record not found!");
+            if(issues[issueIndex].status === 'Returned') return alert("Already returned!");
+
+            issues[issueIndex].status = 'Returned';
+            let bookIndex = books.findIndex(b => b.id === issues[issueIndex].bId);
+            if(bookIndex !== -1) books[bookIndex].copies += 1;
+
+            e.target.reset();
+            saveData();
+            alert("Book Returned Successfully!");
+        }
+
+        // --- 2, 3, 7. Display, Search & View Records ---
+        function renderAll() {
+            // Render Books
+            const search = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : "";
+            const tbody = document.getElementById('booksTableBody');
+            tbody.innerHTML = '';
+            books.filter(b => b.title.toLowerCase().includes(search) || b.id.toString().includes(search)).forEach(b => {
+                tbody.innerHTML += `<tr class="border-b"><td class="p-3 border">${b.id}</td><td class="p-3 border font-semibold">${b.title}</td><td class="p-3 border">${b.author}</td><td class="p-3 border text-green-600 font-bold">${b.copies}</td></tr>`;
+            });
+
+            // Render Students
+            const sList = document.getElementById('studentList');
+            sList.innerHTML = '';
+            students.forEach(s => sList.innerHTML += `<li>ID: ${s.id} | Name: ${s.name} (${s.cls})</li>`);
+
+            // Render Issues
+            const iBody = document.getElementById('issueRecordsTableBody');
+            iBody.innerHTML = '';
+            issues.slice().reverse().forEach(i => {
+                let color = i.status === 'Issued' ? 'text-orange-500' : 'text-green-500';
+                iBody.innerHTML += `<tr class="border-b"><td class="p-3 border">${i.id}</td><td class="p-3 border">${i.bId}</td><td class="p-3 border">${i.sId}</td><td class="p-3 border font-bold ${color}">${i.status}</td></tr>`;
+            });
+        }
+
+        function searchBooks() { renderAll(); }
+    </script>
 </body>
 </html>
